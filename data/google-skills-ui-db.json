@@ -1,0 +1,208 @@
+{
+  "meta": {
+    "databaseName": "google-skills-ui-db",
+    "version": "1.2.0",
+    "createdAt": "2026-10-07T20:27:39.134Z",
+    "deploymentCount": 15,
+    "lastDeploymentAt": "2026-10-07T20:27:39.138Z"
+  },
+  "profile": {
+    "name": "Emmett Wolland",
+    "major": "Business Administration",
+    "concentration": "Information Technology Management (ITM)",
+    "minor": "Computer Science",
+    "institution": "Georgia Institute of Technology (Scheller College of Business & College of Computing)",
+    "degreeCandidate": "Class of May 2026",
+    "gpa": 3.91,
+    "totalCredits": 42,
+    "transcriptFileName": "Emmett_Wolland_GeorgiaTech_Official_Transcript.pdf",
+    "transcriptUploaded": true,
+    "resumeFileName": "Emmett_Wolland_Resume_2026.pdf",
+    "resumeUploaded": true,
+    "fieldsOfInterest": [
+      "AI Product Management",
+      "Cloud Enterprise Architecture",
+      "IT Consulting & Digital Strategy",
+      "FinTech & Data Engineering"
+    ],
+    "lastSavedAt": "2026-10-07T20:27:47.407Z",
+    "lastTransactionHash": "0x4e407ad2ec5b411b8377dda1663f5d7e0e76ab2695a4"
+  },
+  "friends": [
+    {
+      "id": "friend-1",
+      "name": "Sarah Chen",
+      "avatar": "SC",
+      "institution": "Georgia Institute of Technology",
+      "major": "Computer Science",
+      "concentration": "Intelligence & Information Internetworks",
+      "minor": "Technology & Management",
+      "sharedCoursesCount": 4,
+      "addedAt": "2026-09-15",
+      "coursesTaken": [
+        {
+          "code": "CS 1332",
+          "title": "Data Structures & Algorithms",
+          "grade": "A",
+          "institution": "Georgia Tech",
+          "term": "Spring 2025",
+          "isSharedWithUser": true
+        },
+        {
+          "code": "CS 2110",
+          "title": "Computer Organization & Systems",
+          "grade": "A",
+          "institution": "Georgia Tech",
+          "term": "Fall 2025",
+          "isSharedWithUser": true
+        },
+        {
+          "code": "CS 3600",
+          "title": "Introduction to Artificial Intelligence",
+          "grade": "A",
+          "institution": "Georgia Tech",
+          "term": "Fall 2025",
+          "isSharedWithUser": false
+        },
+        {
+          "code": "CS 4641",
+          "title": "Machine Learning Concepts & Practice",
+          "grade": "A",
+          "institution": "Georgia Tech",
+          "term": "Spring 2026",
+          "isSharedWithUser": false
+        },
+        {
+          "code": "MGT 6500",
+          "title": "Analytical Data Modeling",
+          "grade": "A-",
+          "institution": "Georgia Tech",
+          "term": "Fall 2025",
+          "isSharedWithUser": true
+        },
+        {
+          "code": "GCP-K8S",
+          "title": "Manage Kubernetes in Google Cloud",
+          "grade": "Skill Badge",
+          "institution": "Google Skills",
+          "term": "Summer 2026",
+          "isSharedWithUser": true
+        }
+      ]
+    },
+    {
+      "id": "friend-2",
+      "name": "David Miller",
+      "avatar": "DM",
+      "institution": "Georgia Institute of Technology",
+      "major": "Business Administration",
+      "concentration": "Information Technology Management (ITM)",
+      "minor": "Economics",
+      "sharedCoursesCount": 3,
+      "addedAt": "2026-09-20",
+      "coursesTaken": [
+        {
+          "code": "MGT 4058",
+          "title": "Database Management Systems",
+          "grade": "A",
+          "institution": "Georgia Tech",
+          "term": "Fall 2025",
+          "isSharedWithUser": true
+        },
+        {
+          "code": "MGT 6500",
+          "title": "Analytical Data Modeling",
+          "grade": "A",
+          "institution": "Georgia Tech",
+          "term": "Fall 2025",
+          "isSharedWithUser": true
+        },
+        {
+          "code": "CS 1332",
+          "title": "Data Structures & Algorithms",
+          "grade": "B+",
+          "institution": "Georgia Tech",
+          "term": "Spring 2025",
+          "isSharedWithUser": true
+        },
+        {
+          "code": "MGT 4052",
+          "title": "Systems Analysis and Design",
+          "grade": "A",
+          "institution": "Georgia Tech",
+          "term": "Spring 2026",
+          "isSharedWithUser": false
+        },
+        {
+          "code": "GCP-BQ",
+          "title": "Using BigQuery Omni with AWS",
+          "grade": "Lab Badge",
+          "institution": "Google Skills",
+          "term": "Summer 2026",
+          "isSharedWithUser": false
+        }
+      ]
+    },
+    {
+      "id": "friend-3",
+      "name": "Marcus Vance",
+      "avatar": "MV",
+      "institution": "Georgia Institute of Technology",
+      "major": "Industrial & Systems Engineering",
+      "concentration": "Economic & Financial Systems",
+      "minor": "Computer Science",
+      "sharedCoursesCount": 2,
+      "addedAt": "2026-10-01",
+      "coursesTaken": [
+        {
+          "code": "CS 1332",
+          "title": "Data Structures & Algorithms",
+          "grade": "A",
+          "institution": "Georgia Tech",
+          "term": "Spring 2025",
+          "isSharedWithUser": true
+        },
+        {
+          "code": "CS 2110",
+          "title": "Computer Organization & Systems",
+          "grade": "A",
+          "institution": "Georgia Tech",
+          "term": "Fall 2025",
+          "isSharedWithUser": true
+        },
+        {
+          "code": "ISYE 6767",
+          "title": "Quantitative Financial Risk Modeling",
+          "grade": "A",
+          "institution": "Georgia Tech",
+          "term": "Spring 2026",
+          "isSharedWithUser": false
+        },
+        {
+          "code": "GCP-TF",
+          "title": "Managing Cloud Infrastructure with Terraform",
+          "grade": "Quest Badge",
+          "institution": "Google Skills",
+          "term": "Fall 2026",
+          "isSharedWithUser": false
+        },
+        {
+          "code": "GCP-LAKE",
+          "title": "Lakehouse: Qwik Start",
+          "grade": "Lab Badge",
+          "institution": "Google Skills",
+          "term": "Fall 2026",
+          "isSharedWithUser": false
+        }
+      ]
+    }
+  ],
+  "transactions": [
+    {
+      "type": "PROFILE_UPDATE",
+      "timestamp": "2026-10-07T20:27:47.407Z",
+      "txHash": "0x4e407ad2ec5b411b8377dda1663f5d7e0e76ab2695a4",
+      "user": "Emmett Wolland"
+    }
+  ]
+}

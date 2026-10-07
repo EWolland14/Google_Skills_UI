@@ -11,6 +11,76 @@ export interface CourseRecord {
   interestVectorTrack?: 'track_x' | 'track_y' | 'neutral';
 }
 
+export interface UserProfile {
+  name: string;
+  major: string;
+  concentration: string;
+  minor: string;
+  institution: string;
+  degreeCandidate: string;
+  gpa: number;
+  totalCredits: number;
+  transcriptFileName?: string;
+  transcriptUploaded: boolean;
+  resumeFileName?: string;
+  resumeUploaded: boolean;
+  fieldsOfInterest: string[];
+  lastSavedAt?: string;
+  lastTransactionHash?: string;
+}
+
+export interface FriendCourse {
+  code: string;
+  title: string;
+  grade: string;
+  institution: string;
+  term: string;
+  isSharedWithUser?: boolean;
+}
+
+export interface FriendProfile {
+  id: string;
+  name: string;
+  avatar: string;
+  institution: string;
+  major: string;
+  concentration?: string;
+  minor?: string;
+  sharedCoursesCount: number;
+  coursesTaken: FriendCourse[];
+  addedAt: string;
+}
+
+export interface JobPosting {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  salaryRange: string;
+  source: 'Jobs.com' | 'Google Careers' | 'Lightcast';
+  matchScore: number; // 0 - 100%
+  postedDate: string;
+  workType: 'Full-time' | 'Hybrid' | 'Remote';
+  requiredSkills: string[];
+  matchedSkills: string[];
+  missingSkills: string[];
+  bridgeCourse: {
+    title: string;
+    type: 'Course' | 'Lab' | 'Path';
+    duration: string;
+  };
+  jobUrl: string;
+}
+
+export interface DatabaseMetrics {
+  databaseName: string;
+  deploymentCount: number;
+  totalProfilesSaved: number;
+  totalFriendsTracked: number;
+  activeIntegrations: number;
+  lastSavedTimestamp: string;
+}
+
 export interface TranscriptProfile {
   studentName: string;
   program: string;
@@ -57,7 +127,7 @@ export interface TargetJob {
   department: string;
   level: string;
   marketDemand: 'Ultra High' | 'High' | 'Surging';
-  matchScore: number; // 0 - 100%
+  matchScore: number;
   medianSalary: string;
   topSalaryBand: string;
   acquiredSkills: string[];
@@ -72,9 +142,9 @@ export interface TargetJob {
 
 export interface ROIBenchmark {
   courseCombination: string;
-  topEarnerPercentage: string; // e.g., "24%"
-  thresholdTC: string; // e.g., "$500,000+"
-  medianUplift: string; // e.g., "+$85,000 (+38%)"
+  topEarnerPercentage: string;
+  thresholdTC: string;
+  medianUplift: string;
   percentiles: {
     p25: string;
     p50: string;

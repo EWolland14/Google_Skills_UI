@@ -14,16 +14,25 @@ import {
   BrainCircuit, 
   Settings2,
   GraduationCap,
-  ExternalLink
+  ExternalLink,
+  Briefcase,
+  Users,
+  Edit3
 } from 'lucide-react';
-import { TranscriptProfile, ElectiveDivergence } from '../../types';
+import { TranscriptProfile, ElectiveDivergence, UserProfile } from '../../types';
 import { initialTranscriptProfile, electiveDivergenceComparison } from '../../data/mockData';
 
 interface StudentInterfaceProps {
   onNavigateToView: (view: string) => void;
+  userProfile: UserProfile;
+  onOpenProfileSetup: () => void;
 }
 
-export const StudentInterface: React.FC<StudentInterfaceProps> = ({ onNavigateToView }) => {
+export const StudentInterface: React.FC<StudentInterfaceProps> = ({ 
+  onNavigateToView,
+  userProfile,
+  onOpenProfileSetup
+}) => {
   const [profile, setProfile] = useState<TranscriptProfile>(initialTranscriptProfile);
   const [selectedTrack, setSelectedTrack] = useState<'track_x' | 'track_y'>('track_x');
   const [isUploading, setIsUploading] = useState(false);
@@ -43,38 +52,45 @@ export const StudentInterface: React.FC<StudentInterfaceProps> = ({ onNavigateTo
 
   return (
     <div className="space-y-6 pb-12 max-w-7xl mx-auto">
-      {/* Top Banner / Academic Verification Pill */}
+      {/* Top Banner / Academic Verification Pill with Emmett Wolland Profile Info */}
       <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-amber-50 border border-blue-200/80 rounded-2xl p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 shadow-sm">
         <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-300 flex items-center justify-center text-amber-700">
-            <GraduationCap className="w-6 h-6" />
+          <div className="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-300 flex items-center justify-center text-amber-700 font-black text-sm">
+            GT
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <span className="text-sm font-bold text-google-gray-900">{profile.institution}</span>
+              <span className="text-sm font-bold text-google-gray-900">{userProfile.name}</span>
               <span className="text-[11px] px-2 py-0.5 bg-emerald-100 text-emerald-800 rounded-full font-semibold border border-emerald-200">
-                Registrar Verified
+                Official Transcript Verified
+              </span>
+              <span className="text-[10px] px-2 py-0.5 bg-blue-100 text-google-blue rounded-full font-bold">
+                google-skills-ui-db
               </span>
             </div>
-            <p className="text-xs text-google-gray-600">
-              {profile.program} • GPA: <strong className="text-google-gray-900">{profile.gpa}</strong> • Credits: <strong className="text-google-gray-900">{profile.totalCredits} Completed</strong>
+            <p className="text-xs text-google-gray-700 mt-0.5">
+              <strong>{userProfile.major}</strong> • Concentration in <strong>{userProfile.concentration}</strong> • Minor in <strong className="text-indigo-700">{userProfile.minor}</strong>
+            </p>
+            <p className="text-[11px] text-google-gray-500">
+              {userProfile.institution} • GPA: <strong className="text-google-gray-900">{userProfile.gpa}</strong> • Credits: <strong className="text-google-gray-900">{userProfile.totalCredits} Completed</strong>
             </p>
           </div>
         </div>
 
         <div className="flex items-center space-x-2 self-end md:self-auto">
           <button
-            onClick={handleSimulateUpload}
-            className="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-medium text-google-blue bg-white hover:bg-google-blue-light border border-google-gray-300 rounded-lg shadow-sm transition-all"
+            onClick={onOpenProfileSetup}
+            className="flex items-center space-x-1.5 px-3 py-1.5 text-xs font-semibold text-google-blue bg-white hover:bg-google-blue-light border border-blue-200 rounded-lg shadow-sm transition-all"
           >
-            <Upload className="w-3.5 h-3.5" />
-            <span>{isUploading ? 'Parsing Record...' : 'Re-upload Transcript'}</span>
+            <Edit3 className="w-3.5 h-3.5" />
+            <span>Edit Profile &amp; Resume</span>
           </button>
           <button
-            onClick={() => onNavigateToView('stackable')}
+            onClick={() => onNavigateToView('jobs')}
             className="flex items-center space-x-1 px-3 py-1.5 text-xs font-semibold text-white bg-google-blue hover:bg-google-blue-hover rounded-lg shadow-sm transition-all"
           >
-            <span>View 2 Stackable Minors</span>
+            <Briefcase className="w-3.5 h-3.5 mr-1" />
+            <span>Jobs for ITM + CS Minor</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -108,7 +124,7 @@ export const StudentInterface: React.FC<StudentInterfaceProps> = ({ onNavigateTo
               <div className="flex items-center space-x-3 text-xs text-google-gray-600">
                 <span>⏱️ 6 minutes</span>
                 <span>•</span>
-                <span className="text-emerald-700 font-medium">Recommended for GT MBA Core</span>
+                <span className="text-emerald-700 font-medium">Recommended for ITM + CS Minor Core</span>
               </div>
               <div className="pt-2">
                 <button className="px-5 py-2 bg-google-blue hover:bg-google-blue-hover text-white text-xs font-medium rounded-full shadow-sm flex items-center space-x-1.5 transition-colors">
@@ -250,7 +266,7 @@ export const StudentInterface: React.FC<StudentInterfaceProps> = ({ onNavigateTo
             <div className="mb-4">
               <h3 className="text-base font-bold text-google-gray-900 flex items-center">
                 <Compass className="w-5 h-5 text-indigo-600 mr-2" />
-                Divergent Elective Interest Vectors: Georgia Tech MBA
+                Divergent Elective Interest Vectors: Georgia Tech ITM + CS Minor
               </h3>
               <p className="text-xs text-google-gray-600 mt-1 leading-relaxed">
                 Our semantic parser analyzed your specialized Georgia Tech electives. Contrasting your <strong>Psychology elective (PSYC 6010)</strong> against your <strong>Engineering elective (ME 6101)</strong> reveals two distinct career divergence trajectories:
@@ -367,14 +383,14 @@ export const StudentInterface: React.FC<StudentInterfaceProps> = ({ onNavigateTo
             <div className="flex items-center justify-between mb-4">
               <div>
                 <h3 className="text-sm font-bold text-google-gray-900">
-                  Parsed Academic Record: Georgia Tech Scheller College of Business
+                  Parsed Academic Record: Emmett Wolland (Scheller College of Business)
                 </h3>
                 <p className="text-xs text-google-gray-600">
-                  Extracted from Banner Registrar API ({profile.courses.length} courses authenticated)
+                  Extracted from Banner Registrar API ({profile.courses.length} courses authenticated in database)
                 </p>
               </div>
               <span className="text-xs font-semibold text-google-blue bg-blue-50 px-2.5 py-1 rounded-full border border-blue-200">
-                36 Credit Hours
+                42 Credit Hours Verified
               </span>
             </div>
 
@@ -513,6 +529,26 @@ export const StudentInterface: React.FC<StudentInterfaceProps> = ({ onNavigateTo
                 </button>
               </div>
             </div>
+          </div>
+
+          {/* Quick Jump to Jobs Portal */}
+          <div className="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-200 rounded-2xl p-5 shadow-sm space-y-3">
+            <div className="flex items-center space-x-2">
+              <Briefcase className="w-4 h-4 text-indigo-700" />
+              <h4 className="text-xs font-bold text-indigo-950 uppercase">
+                Jobs for ITM + CS Minor
+              </h4>
+            </div>
+            <p className="text-xs text-google-gray-700">
+              5 high-match requisitions found on <strong>Jobs.com</strong> and <strong>Google Careers</strong>.
+            </p>
+            <button
+              onClick={() => onNavigateToView('jobs')}
+              className="w-full py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-bold transition-colors flex items-center justify-center space-x-1"
+            >
+              <span>Explore Jobs &amp; Opportunities</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
 
           {/* Progress Breakdown Widget */}

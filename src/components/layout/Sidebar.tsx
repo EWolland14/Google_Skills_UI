@@ -12,19 +12,23 @@ import {
   ShieldCheck, 
   Network,
   Sparkles,
-  GraduationCap
+  GraduationCap,
+  Briefcase,
+  Users
 } from 'lucide-react';
 
 interface SidebarProps {
   activeView: string;
   setActiveView: (view: string) => void;
   isCollapsed: boolean;
+  friendsCount?: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
   activeView,
   setActiveView,
-  isCollapsed
+  isCollapsed,
+  friendsCount = 3
 }) => {
   const primaryNavItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -33,6 +37,18 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   const intelligenceNavItems = [
+    { 
+      id: 'jobs', 
+      label: 'Jobs & Opportunities', 
+      icon: Briefcase, 
+      badge: 'Jobs.com' 
+    },
+    { 
+      id: 'friends', 
+      label: 'Friends & Peer Network', 
+      icon: Users, 
+      badge: `${friendsCount} Peers` 
+    },
     { 
       id: 'stackable', 
       label: 'Stackable Credentials', 
@@ -114,7 +130,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <div className="px-3 flex items-center justify-between mb-1">
               <span className="text-[11px] font-semibold text-google-blue uppercase tracking-wider flex items-center">
                 <Sparkles className="w-3 h-3 mr-1 text-google-blue" />
-                Intelligence Ecosystem
+                Intelligence & Jobs
               </span>
             </div>
           )}
@@ -183,19 +199,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
         </div>
       </div>
 
-      {/* Georgia Tech Institutional Sync Footer Card */}
+      {/* Georgia Tech ITM & Database Sync Footer Card */}
       {!isCollapsed && (
         <div className="p-3 m-3 bg-gradient-to-br from-amber-50 to-blue-50 border border-amber-200/80 rounded-xl">
           <div className="flex items-center space-x-2 mb-1.5">
             <GraduationCap className="w-4 h-4 text-amber-700" />
-            <span className="text-[11px] font-bold text-amber-900">Georgia Tech Active</span>
+            <span className="text-[11px] font-bold text-amber-900">Georgia Tech Scheller</span>
           </div>
           <p className="text-[10px] text-google-gray-600 leading-tight mb-2">
-            DegreeWorks & Banner synced. 36 Credits verified.
+            Business ITM + CS Minor verified in <strong>google-skills-ui-db</strong>.
           </p>
           <div className="flex items-center justify-between text-[10px] text-google-blue font-medium">
             <span className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span>OIDC Verified</span>
+            <span>Database Linked</span>
           </div>
         </div>
       )}

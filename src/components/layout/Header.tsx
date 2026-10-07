@@ -1,5 +1,6 @@
 import React from 'react';
-import { Menu, Search, Star, Flame, HelpCircle, Globe, ExternalLink, Sparkles } from 'lucide-react';
+import { Menu, Search, Star, Flame, HelpCircle, Globe, ExternalLink, User, Database, Edit3 } from 'lucide-react';
+import { UserProfile } from '../../types';
 
 interface HeaderProps {
   onToggleSidebar?: () => void;
@@ -7,6 +8,8 @@ interface HeaderProps {
   setSearchQuery: (q: string) => void;
   activeView: string;
   setActiveView: (view: string) => void;
+  userProfile: UserProfile;
+  onOpenProfileSetup: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -14,7 +17,9 @@ export const Header: React.FC<HeaderProps> = ({
   searchQuery,
   setSearchQuery,
   activeView,
-  setActiveView
+  setActiveView,
+  userProfile,
+  onOpenProfileSetup
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-google-gray-200 shadow-sm">
@@ -65,17 +70,33 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Right Actions: Points, Streak, Help, Profile, Cloud Console CTA */}
-        <div className="flex items-center space-x-2 sm:space-x-4">
-          <div className="hidden lg:flex items-center text-xs text-google-gray-700 mr-2">
-            <span>Apply your skills in Google Cloud console</span>
+        {/* Right Actions: Database Status, Cloud Console CTA, Points, Streak, Profile */}
+        <div className="flex items-center space-x-2 sm:space-x-3">
+          
+          {/* Quick Edit Profile Button */}
+          <button
+            onClick={onOpenProfileSetup}
+            className="hidden sm:flex items-center space-x-1.5 px-3 py-1 bg-white hover:bg-blue-50 text-google-blue text-xs font-semibold rounded-full border border-blue-200 shadow-2xs transition-all"
+            title="Edit Profile, Resume, and Sync to Database"
+          >
+            <Edit3 className="w-3.5 h-3.5" />
+            <span>Profile &amp; Resume</span>
+          </button>
+
+          {/* Database indicator */}
+          <div className="hidden xl:flex items-center space-x-1.5 px-2.5 py-1 bg-google-gray-100 border border-google-gray-200 rounded-full text-[11px] font-mono text-google-gray-700">
+            <Database className="w-3 h-3 text-emerald-600" />
+            <span>google-skills-ui-db</span>
+          </div>
+
+          <div className="hidden lg:flex items-center text-xs text-google-gray-700">
             <a
               href="https://console.cloud.google.com"
               target="_blank"
               rel="noreferrer"
-              className="ml-2 px-3 py-1 bg-white hover:bg-google-gray-100 text-google-blue text-xs font-medium rounded-full border border-google-gray-300 shadow-sm transition-colors flex items-center"
+              className="px-3 py-1 bg-white hover:bg-google-gray-100 text-google-blue text-xs font-medium rounded-full border border-google-gray-300 shadow-sm transition-colors flex items-center"
             >
-              Get started
+              Cloud Console
               <ExternalLink className="w-3 h-3 ml-1" />
             </a>
           </div>
@@ -92,24 +113,22 @@ export const Header: React.FC<HeaderProps> = ({
             <span>5</span>
           </div>
 
-          {/* Help & Globe */}
-          <button className="p-1.5 text-google-gray-600 hover:text-google-gray-900 hover:bg-google-gray-100 rounded-full hidden sm:block">
-            <HelpCircle className="w-5 h-5" />
-          </button>
-          <button className="p-1.5 text-google-gray-600 hover:text-google-gray-900 hover:bg-google-gray-100 rounded-full hidden sm:block">
-            <Globe className="w-5 h-5" />
-          </button>
-
-          {/* User Profile Avatar */}
-          <div className="relative group cursor-pointer pl-1">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-google-blue to-teal-400 p-[2px] shadow-sm">
+          {/* User Profile Avatar with Emmett Wolland initials */}
+          <div 
+            onClick={onOpenProfileSetup}
+            className="relative group cursor-pointer pl-1"
+          >
+            <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-blue-600 to-indigo-600 p-[2px] shadow-sm hover:scale-105 transition-transform">
               <div className="w-full h-full rounded-full bg-white flex items-center justify-center font-bold text-xs text-google-blue overflow-hidden">
-                <span className="font-sans font-semibold">AR</span>
+                <span className="font-sans font-black">EW</span>
               </div>
             </div>
             {/* Tooltip */}
-            <div className="absolute right-0 top-10 hidden group-hover:block bg-google-gray-900 text-white text-xs py-1 px-2 rounded shadow-lg whitespace-nowrap z-50">
-              Alex Rivera (Georgia Tech MBA '26)
+            <div className="absolute right-0 top-11 hidden group-hover:block bg-google-gray-900 text-white text-xs py-1.5 px-3 rounded-lg shadow-xl whitespace-nowrap z-50">
+              <p className="font-bold">{userProfile.name}</p>
+              <p className="text-[10px] text-google-gray-300">
+                {userProfile.concentration} • Minor in {userProfile.minor}
+              </p>
             </div>
           </div>
         </div>

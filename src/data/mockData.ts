@@ -1,4 +1,5 @@
 import { 
+  UserProfile,
   TranscriptProfile, 
   ElectiveDivergence, 
   StackableCredential, 
@@ -6,17 +7,52 @@ import {
   ROIBenchmark, 
   EnterpriseMandate, 
   IngestionPipeline, 
-  CatalogItem 
+  CatalogItem,
+  FriendProfile,
+  JobPosting,
+  DatabaseMetrics
 } from '../types';
 
-export const initialTranscriptProfile: TranscriptProfile = {
-  studentName: "Alex Rivera",
-  program: "Master of Business Administration (MBA - Technology & Strategy)",
-  institution: "Georgia Institute of Technology (Scheller College of Business)",
-  gpa: 3.88,
-  totalCredits: 36,
+export const initialUserProfile: UserProfile = {
+  name: "Emmett Wolland",
+  major: "Business Administration",
+  concentration: "Information Technology Management (ITM)",
+  minor: "Computer Science",
+  institution: "Georgia Institute of Technology (Scheller College of Business & College of Computing)",
   degreeCandidate: "Class of May 2026",
-  verifiedAt: "2026-10-05T14:32:00Z via Banner API",
+  gpa: 3.91,
+  totalCredits: 42,
+  transcriptFileName: "Emmett_Wolland_GeorgiaTech_Official_Transcript.pdf",
+  transcriptUploaded: true,
+  resumeFileName: "Emmett_Wolland_Resume_2026.pdf",
+  resumeUploaded: true,
+  fieldsOfInterest: [
+    "AI Product Management",
+    "Cloud Enterprise Architecture",
+    "IT Consulting & Digital Strategy",
+    "FinTech & Data Engineering"
+  ],
+  lastSavedAt: "2026-10-07T16:22:00Z",
+  lastTransactionHash: "0x4e29a1b9f7c352840d165e381b99a6cf78b4091c5321"
+};
+
+export const initialDatabaseMetrics: DatabaseMetrics = {
+  databaseName: "google-skills-ui-db",
+  deploymentCount: 14,
+  totalProfilesSaved: 1,
+  totalFriendsTracked: 3,
+  activeIntegrations: 3,
+  lastSavedTimestamp: "2026-10-07T16:22:00Z"
+};
+
+export const initialTranscriptProfile: TranscriptProfile = {
+  studentName: "Emmett Wolland",
+  program: "Bachelor of Science in Business Administration (Concentration: ITM) with Minor in Computer Science",
+  institution: "Georgia Institute of Technology (Scheller College of Business & College of Computing)",
+  gpa: 3.91,
+  totalCredits: 42,
+  degreeCandidate: "Class of May 2026",
+  verifiedAt: "2026-10-07T15:30:00Z via Banner API",
   courses: [
     {
       id: "c1",
@@ -31,47 +67,47 @@ export const initialTranscriptProfile: TranscriptProfile = {
     },
     {
       id: "c2",
-      code: "MGT 6090",
-      title: "Business Fundamentals & Strategic Formulation",
+      code: "MGT 4058",
+      title: "Database Management Systems for Business (ITM Core)",
       institution: "Georgia Tech",
       term: "Fall 2025",
       credits: 3.0,
       grade: "A",
       category: "core",
-      extractedSkills: ["Competitive Analysis", "Market Entry Frameworks", "Valuation", "Product Strategy"]
+      extractedSkills: ["Relational Database Design", "SQL Modeling", "ETL Pipelines", "Data Warehousing"]
     },
     {
       id: "c3",
-      code: "MGT 6203",
-      title: "Data Analytics in Business Practice",
+      code: "CS 1332",
+      title: "Data Structures & Algorithms (CS Minor Core)",
       institution: "Georgia Tech",
-      term: "Spring 2026",
+      term: "Spring 2025",
       credits: 3.0,
       grade: "A",
       category: "core",
-      extractedSkills: ["SQL Database Design", "Regression Analysis", "Customer Segmentation", "A/B Testing"]
+      extractedSkills: ["Algorithm Complexity", "Graph Traversal", "Binary Trees", "Dynamic Programming"]
     },
     {
       id: "c4",
-      code: "CS 7641",
-      title: "Machine Learning for Enterprise Applications",
+      code: "CS 2110",
+      title: "Computer Organization & Systems Programming (CS Minor)",
+      institution: "Georgia Tech",
+      term: "Fall 2025",
+      credits: 3.0,
+      grade: "A",
+      category: "core",
+      extractedSkills: ["Systems Architecture", "Memory Management", "C/Assembly", "Process Concurrency"]
+    },
+    {
+      id: "c5",
+      code: "MGT 6203",
+      title: "Data Analytics in Business Practice (ITM Core)",
       institution: "Georgia Tech",
       term: "Spring 2026",
       credits: 3.0,
       grade: "A",
       category: "core",
-      extractedSkills: ["Supervised Learning", "Deep Learning Architectures", "Model Evaluation", "PyTorch"]
-    },
-    {
-      id: "c5",
-      code: "MGT 6000",
-      title: "Financial Management & Capital Budgeting",
-      institution: "Georgia Tech",
-      term: "Fall 2025",
-      credits: 3.0,
-      grade: "B+",
-      category: "core",
-      extractedSkills: ["DCF Modeling", "Capital Allocation", "Financial Forecasting", "Risk Hedging"]
+      extractedSkills: ["Regression Analysis", "Customer Segmentation", "A/B Testing", "Tableau/Looker"]
     },
     {
       id: "c6",
@@ -111,6 +147,223 @@ export const initialTranscriptProfile: TranscriptProfile = {
     }
   ]
 };
+
+export const initialFriendsList: FriendProfile[] = [
+  {
+    id: "friend-1",
+    name: "Sarah Chen",
+    avatar: "SC",
+    institution: "Georgia Institute of Technology",
+    major: "Computer Science",
+    concentration: "Intelligence & Information Internetworks",
+    minor: "Technology & Management",
+    sharedCoursesCount: 4,
+    addedAt: "2026-09-15",
+    coursesTaken: [
+      { code: "CS 1332", title: "Data Structures & Algorithms", grade: "A", institution: "Georgia Tech", term: "Spring 2025", isSharedWithUser: true },
+      { code: "CS 2110", title: "Computer Organization & Systems", grade: "A", institution: "Georgia Tech", term: "Fall 2025", isSharedWithUser: true },
+      { code: "CS 3600", title: "Introduction to Artificial Intelligence", grade: "A", institution: "Georgia Tech", term: "Fall 2025", isSharedWithUser: false },
+      { code: "CS 4641", title: "Machine Learning Concepts & Practice", grade: "A", institution: "Georgia Tech", term: "Spring 2026", isSharedWithUser: false },
+      { code: "MGT 6500", title: "Analytical Data Modeling", grade: "A-", institution: "Georgia Tech", term: "Fall 2025", isSharedWithUser: true },
+      { code: "GCP-K8S", title: "Manage Kubernetes in Google Cloud", grade: "Skill Badge", institution: "Google Skills", term: "Summer 2026", isSharedWithUser: true }
+    ]
+  },
+  {
+    id: "friend-2",
+    name: "David Miller",
+    avatar: "DM",
+    institution: "Georgia Institute of Technology",
+    major: "Business Administration",
+    concentration: "Information Technology Management (ITM)",
+    minor: "Economics",
+    sharedCoursesCount: 3,
+    addedAt: "2026-09-20",
+    coursesTaken: [
+      { code: "MGT 4058", title: "Database Management Systems", grade: "A", institution: "Georgia Tech", term: "Fall 2025", isSharedWithUser: true },
+      { code: "MGT 6500", title: "Analytical Data Modeling", grade: "A", institution: "Georgia Tech", term: "Fall 2025", isSharedWithUser: true },
+      { code: "CS 1332", title: "Data Structures & Algorithms", grade: "B+", institution: "Georgia Tech", term: "Spring 2025", isSharedWithUser: true },
+      { code: "MGT 4052", title: "Systems Analysis and Design", grade: "A", institution: "Georgia Tech", term: "Spring 2026", isSharedWithUser: false },
+      { code: "GCP-BQ", title: "Using BigQuery Omni with AWS", grade: "Lab Badge", institution: "Google Skills", term: "Summer 2026", isSharedWithUser: false }
+    ]
+  },
+  {
+    id: "friend-3",
+    name: "Marcus Vance",
+    avatar: "MV",
+    institution: "Georgia Institute of Technology",
+    major: "Industrial & Systems Engineering",
+    concentration: "Economic & Financial Systems",
+    minor: "Computer Science",
+    sharedCoursesCount: 2,
+    addedAt: "2026-10-01",
+    coursesTaken: [
+      { code: "CS 1332", title: "Data Structures & Algorithms", grade: "A", institution: "Georgia Tech", term: "Spring 2025", isSharedWithUser: true },
+      { code: "CS 2110", title: "Computer Organization & Systems", grade: "A", institution: "Georgia Tech", term: "Fall 2025", isSharedWithUser: true },
+      { code: "ISYE 6767", title: "Quantitative Financial Risk Modeling", grade: "A", institution: "Georgia Tech", term: "Spring 2026", isSharedWithUser: false },
+      { code: "GCP-TF", title: "Managing Cloud Infrastructure with Terraform", grade: "Quest Badge", institution: "Google Skills", term: "Fall 2026", isSharedWithUser: false },
+      { code: "GCP-LAKE", title: "Lakehouse: Qwik Start", grade: "Lab Badge", institution: "Google Skills", term: "Fall 2026", isSharedWithUser: false }
+    ]
+  }
+];
+
+export const liveJobsDatabase: JobPosting[] = [
+  {
+    id: "job-p1",
+    title: "Associate Product Manager (APM) - AI & Cloud Platform",
+    company: "Google / Alphabet",
+    location: "Atlanta, GA / Mountain View, CA (Hybrid)",
+    salaryRange: "$165,000 - $210,000 Total Compensation",
+    source: "Google Careers",
+    matchScore: 92,
+    postedDate: "2 hours ago",
+    workType: "Hybrid",
+    requiredSkills: [
+      "Technical Product Strategy",
+      "CS Fundamentals & Algorithms (CS 1332)",
+      "Database & Analytics Architectures (MGT 4058)",
+      "Human-AI User Alignment (PSYC 6010)"
+    ],
+    matchedSkills: [
+      "CS 1332 Data Structures & Algorithms",
+      "MGT 4058 Database Management",
+      "PSYC 6010 Human-AI Ergonomics",
+      "MGT 6500 Analytical Data Modeling"
+    ],
+    missingSkills: [
+      "Gemini Enterprise Evaluation & Guardrails"
+    ],
+    bridgeCourse: {
+      title: "Deploy and Manage Generative AI Models",
+      type: "Path",
+      duration: "18 hours 30 minutes"
+    },
+    jobUrl: "https://careers.google.com"
+  },
+  {
+    id: "job-p2",
+    title: "Cloud Solutions Consultant (ITM Enterprise Practice)",
+    company: "Google Cloud",
+    location: "Atlanta, GA / New York, NY",
+    salaryRange: "$155,000 - $195,000 Total Compensation",
+    source: "Google Careers",
+    matchScore: 88,
+    postedDate: "1 day ago",
+    workType: "Full-time",
+    requiredSkills: [
+      "Business Information Systems Architecture",
+      "Relational & Analytical Database Management",
+      "Multi-Cloud Data Warehousing (BigQuery Omni)",
+      "Systems Optimization & Reliability"
+    ],
+    matchedSkills: [
+      "MGT 4058 Database Systems (ITM)",
+      "CS 2110 Systems Programming",
+      "MGT 6500 Optimization Modeling"
+    ],
+    missingSkills: [
+      "Using BigQuery Omni with AWS (Multi-Cloud Lab)"
+    ],
+    bridgeCourse: {
+      title: "Using BigQuery Omni with AWS",
+      type: "Lab",
+      duration: "40 minutes"
+    },
+    jobUrl: "https://careers.google.com"
+  },
+  {
+    id: "job-p3",
+    title: "Technical Product Analyst - Digital Strategy & ITM",
+    company: "Jobs.com Strategic Partner / Lightcast",
+    location: "Atlanta, GA (Remote Available)",
+    salaryRange: "$138,000 - $175,000 Total Compensation",
+    source: "Jobs.com",
+    matchScore: 85,
+    postedDate: "3 hours ago",
+    workType: "Remote",
+    requiredSkills: [
+      "Data Modeling & Business Formulation",
+      "SQL Query Optimization",
+      "A/B Experimentation & Analytics",
+      "Enterprise SaaS Workflows"
+    ],
+    matchedSkills: [
+      "MGT 6500 Analytical Modeling",
+      "MGT 4058 Database Management",
+      "MGT 6203 Business Data Analytics"
+    ],
+    missingSkills: [
+      "Implement Cloud Collaboration and Productivity Workflows"
+    ],
+    bridgeCourse: {
+      title: "Implement Cloud Collaboration and Productivity Workflows",
+      type: "Course",
+      duration: "30 minutes"
+    },
+    jobUrl: "https://jobs.com"
+  },
+  {
+    id: "job-p4",
+    title: "Enterprise AI Solutions Associate",
+    company: "Anthropic / Stripe Partner Network",
+    location: "San Francisco, CA / Atlanta, GA",
+    salaryRange: "$175,000 - $230,000 Total Compensation",
+    source: "Jobs.com",
+    matchScore: 82,
+    postedDate: "5 hours ago",
+    workType: "Hybrid",
+    requiredSkills: [
+      "Human-Centered AI Interfaces",
+      "Data Structures & Python Modeling",
+      "Enterprise Cloud Orchestration",
+      "API Integration & Middleware"
+    ],
+    matchedSkills: [
+      "PSYC 6010 Human-System Ergonomics",
+      "CS 1332 Data Structures & Algorithms",
+      "MGT 6500 Decision Optimization"
+    ],
+    missingSkills: [
+      "Manage Kubernetes in Google Cloud"
+    ],
+    bridgeCourse: {
+      title: "Manage Kubernetes in Google Cloud",
+      type: "Course",
+      duration: "30 minutes"
+    },
+    jobUrl: "https://jobs.com"
+  },
+  {
+    id: "job-p5",
+    title: "Quantitative Technology Analyst (ITM / CS)",
+    company: "JPMorgan Chase / FinTech Practice",
+    location: "New York, NY / Atlanta, GA",
+    salaryRange: "$160,000 - $205,000 Total Compensation",
+    source: "Lightcast",
+    matchScore: 79,
+    postedDate: "Just now",
+    workType: "Full-time",
+    requiredSkills: [
+      "Algorithmic Problem Solving (CS 1332)",
+      "Enterprise Financial Systems",
+      "Cloud Infrastructure as Code",
+      "High-Throughput Analytics"
+    ],
+    matchedSkills: [
+      "CS 1332 Data Structures",
+      "CS 2110 Systems Organization",
+      "MGT 4058 Database Systems"
+    ],
+    missingSkills: [
+      "Managing Cloud Infrastructure with Terraform"
+    ],
+    bridgeCourse: {
+      title: "Managing Cloud Infrastructure with Terraform",
+      type: "Course",
+      duration: "3 hours 45 minutes"
+    },
+    jobUrl: "https://jobs.com"
+  }
+];
 
 export const electiveDivergenceComparison: {
   trackX: ElectiveDivergence;
@@ -165,7 +418,7 @@ export const stackableCredentialsList: StackableCredential[] = [
     totalCoursesRequired: 4,
     completedCoursesCount: 3,
     percentageComplete: 75,
-    fulfilledCourses: ["MGT 6500", "MGT 6203", "CS 7641"],
+    fulfilledCourses: ["MGT 6500", "MGT 6203", "CS 1332"],
     remainingCourses: [
       {
         code: "MGT 8803",
@@ -184,7 +437,7 @@ export const stackableCredentialsList: StackableCredential[] = [
     totalCoursesRequired: 3,
     completedCoursesCount: 2,
     percentageComplete: 66,
-    fulfilledCourses: ["MGT 6500", "MGT 6000"],
+    fulfilledCourses: ["MGT 6500", "MGT 4058"],
     remainingCourses: [
       {
         code: "ISYE 6767",
@@ -250,13 +503,13 @@ export const targetJobsDatabase: TargetJob[] = [
     department: "Applied AI & Cloud Platforms",
     level: "Staff / Principal (L6/L7)",
     marketDemand: "Surging",
-    matchScore: 78,
+    matchScore: 92,
     medianSalary: "$340,000",
     topSalaryBand: "$520,000+",
     acquiredSkills: [
       "Predictive Analytics & Modeling (GT MGT 6500)",
-      "Strategic Market Formulation (GT MGT 6090)",
-      "Machine Learning Foundations (GT CS 7641)",
+      "Database Systems for Business (GT MGT 4058)",
+      "Data Structures & Algorithms (GT CS 1332)",
       "Human-AI Cognitive Ergonomics (GT PSYC 6010)",
       "BigQuery Data Insights (Google Skills)"
     ],
@@ -292,13 +545,13 @@ export const targetJobsDatabase: TargetJob[] = [
     department: "Enterprise Cloud Engineering",
     level: "Staff (L6)",
     marketDemand: "Ultra High",
-    matchScore: 72,
+    matchScore: 84,
     medianSalary: "$360,000",
     topSalaryBand: "$550,000+",
     acquiredSkills: [
       "Complex Systems Decomposition (GT ME 6101)",
-      "Kubernetes Cluster Orchestration (Google Skills)",
-      "BigQuery Analytics & Data Cloud (Google Skills)",
+      "Computer Organization & Systems (GT CS 2110)",
+      "Database Systems Architecture (GT MGT 4058)",
       "Analytical Optimization (GT MGT 6500)"
     ],
     gapSkills: [
@@ -333,13 +586,13 @@ export const targetJobsDatabase: TargetJob[] = [
     department: "Fintech & Quantitative Trading",
     level: "Director (L7/L8)",
     marketDemand: "High",
-    matchScore: 65,
+    matchScore: 78,
     medianSalary: "$420,000",
     topSalaryBand: "$650,000+",
     acquiredSkills: [
-      "Financial Modeling & Capital Budgeting (GT MGT 6000)",
+      "Database Modeling & SQL (GT MGT 4058)",
       "Analytical Optimization (GT MGT 6500)",
-      "Machine Learning Algorithms (GT CS 7641)",
+      "Data Structures & Algorithms (GT CS 1332)",
       "Data Analytics in Business (GT MGT 6203)"
     ],
     gapSkills: [
@@ -365,7 +618,7 @@ export const targetJobsDatabase: TargetJob[] = [
 ];
 
 export const roiBenchmarkData: ROIBenchmark = {
-  courseCombination: "Georgia Tech MBA Core + Google Cloud Architect + Applied AI Electives",
+  courseCombination: "Georgia Tech Business ITM + CS Minor + Google Cloud Architect",
   topEarnerPercentage: "24.6%",
   thresholdTC: "$500,000+",
   medianUplift: "+$85,000 (+38.2%)",
@@ -381,7 +634,7 @@ export const roiBenchmarkData: ROIBenchmark = {
       stage: "Year 0: Immediate Post-Graduation",
       yearsPostGrad: "0 - 1 Years",
       medianTC: "$175,000 TC",
-      typicalTitles: ["Associate Product Manager", "Cloud Solutions Consultant", "Senior Strategy Associate"],
+      typicalTitles: ["Associate Product Manager (APM)", "Cloud Solutions Consultant", "ITM Strategy Analyst"],
       topCompanies: ["Google", "McKinsey", "Deloitte Consulting", "Amazon"]
     },
     {
