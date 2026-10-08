@@ -12,11 +12,17 @@ import {
   Globe, 
   BookOpen,
   TrendingUp,
-  Eye,
-  EyeOff,
   Mic,
   ShieldCheck,
-  Sparkles
+  Sparkles,
+  Award,
+  Zap,
+  FileText,
+  Copy,
+  Check,
+  X,
+  Send,
+  UserCheck
 } from 'lucide-react';
 import { JobPosting } from '../../types';
 import { liveJobsDatabase } from '../../data/mockData';
@@ -41,7 +47,15 @@ export const JobsPortal: React.FC<JobsPortalProps> = ({
   const [selectedSource, setSelectedSource] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [enrolledBridge, setEnrolledBridge] = useState<string[]>([]);
-  const [reverseRecruitingActive, setReverseRecruitingActive] = useState<boolean>(true);
+  
+  // Fast-track recruiter state
+  const [googleReferralRequested, setGoogleReferralRequested] = useState<boolean>(false);
+  const [jobsComPacketSubmitted, setJobsComPacketSubmitted] = useState<boolean>(false);
+  
+  // ATS Resume Tailoring Modal state
+  const [selectedJobForAts, setSelectedJobForAts] = useState<JobPosting | null>(null);
+  const [copiedBullets, setCopiedBullets] = useState<boolean>(false);
+  const [packetSubmittedForJob, setPacketSubmittedForJob] = useState<string | null>(null);
 
   const filteredJobs = jobs.filter(job => {
     const matchesSource = selectedSource === 'all' || job.source.toLowerCase() === selectedSource.toLowerCase();
@@ -57,120 +71,169 @@ export const JobsPortal: React.FC<JobsPortalProps> = ({
     }
   };
 
+  const handleCopyBullets = (bulletsText: string) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(bulletsText);
+    }
+    setCopiedBullets(true);
+    setTimeout(() => setCopiedBullets(false), 2500);
+  };
+
+  const getTailoredBullets = (job: JobPosting) => {
+    return [
+      `Architected scalable analytical workflows integrating Georgia Tech MGT 4058 database systems with Google Cloud BigQuery, directly aligning with ${job.company}'s requirements for ${job.title}.`,
+      `Engineered robust algorithmic solutions utilizing CS 1332 data structures and systems fundamentals (CS 2110), maintaining a 3.91 GPA across Georgia Tech ITM and Computer Science coursework.`,
+      `Synthesized cross-functional business strategy (MGT 6500) and user ergonomics (PSYC 6010) to optimize system delivery pipelines, closing key readiness gaps in ${job.bridgeCourse.title}.`
+    ];
+  };
+
   return (
     <div className="space-y-6 pb-12 max-w-7xl mx-auto">
       {/* Top Banner */}
       <div className="bg-white rounded-2xl border border-google-gray-200 p-5 shadow-2xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center space-x-2">
-            <span className="px-2 py-0.5 text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-full">
-              Live Market Requisitions
+            <span className="px-2.5 py-0.5 text-[11px] font-bold bg-blue-50 text-google-blue border border-blue-200 rounded-full flex items-center gap-1">
+              <ShieldCheck className="w-3 h-3 text-google-blue" />
+              Direct Recruiter Fast-Track Active
             </span>
             <span className="text-xs text-google-gray-500 font-mono">
               Jobs.com • Google Careers • Lightcast
             </span>
           </div>
           <h1 className="text-lg md:text-xl font-bold text-google-gray-900 mt-1">
-            Career Opportunities for ITM + Computer Science Minor
+            Career Opportunities &amp; Verified Recruiter Pipeline
           </h1>
           <p className="text-xs text-google-gray-600">
-            Tailored specifically for <strong>{currentUserProfile.name}</strong> ({currentUserProfile.concentration} • Minor in {currentUserProfile.minor}).
+            Tailored specifically for <strong>{currentUserProfile.name}</strong> ({currentUserProfile.concentration} • Minor in {currentUserProfile.minor} • Georgia Tech 3.91 GPA).
           </p>
         </div>
 
-        {/* FEATURE 8: Anonymous Reverse Recruiting Mode Toggle */}
-        <div className="flex items-center space-x-3 bg-google-gray-50 border border-google-gray-200 rounded-xl p-2.5 self-start md:self-auto">
-          <div className="flex items-center space-x-2">
-            {reverseRecruitingActive ? (
-              <Eye className="w-4 h-4 text-emerald-600" />
-            ) : (
-              <EyeOff className="w-4 h-4 text-google-gray-400" />
-            )}
-            <div>
-              <span className="text-xs font-bold text-google-gray-900 block">
-                Reverse Recruiting
-              </span>
-              <span className="text-[10px] text-google-gray-500">
-                {reverseRecruitingActive ? 'Anonymous profile active' : 'Disabled'}
-              </span>
-            </div>
-          </div>
-
-          <button
-            onClick={() => setReverseRecruitingActive(!reverseRecruitingActive)}
-            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all ${
-              reverseRecruitingActive
-                ? 'bg-emerald-600 text-white shadow-2xs'
-                : 'bg-google-gray-200 text-google-gray-700'
-            }`}
-          >
-            {reverseRecruitingActive ? 'ON' : 'OFF'}
-          </button>
+        <div className="flex items-center space-x-2 self-start md:self-auto">
+          <span className="text-xs text-google-gray-500 hidden sm:inline">Verification:</span>
+          <span className="px-2.5 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-xl text-xs font-bold flex items-center gap-1">
+            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+            GT Banner Transcript Verified
+          </span>
         </div>
       </div>
 
-      {/* FEATURE 8 CARD: Inbound Recruiter Bids (When active) */}
-      {reverseRecruitingActive && (
-        <div className="bg-gradient-to-r from-emerald-950 via-slate-900 to-indigo-950 text-white rounded-2xl p-5 border border-emerald-500/40 shadow-sm space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-white/10 pb-2.5">
-            <div className="flex items-center space-x-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-              <span className="text-xs font-bold uppercase tracking-wider text-emerald-300">
-                Reverse Recruiting Active: Candidate #GT-ITM-CS-92
-              </span>
+      {/* RECRUITER FAST-TRACK & ATS PIPELINE CARD */}
+      <div className="bg-white border border-blue-200 rounded-2xl p-5 shadow-2xs space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-google-gray-100 pb-3">
+          <div className="flex items-center space-x-2.5">
+            <div className="w-8 h-8 rounded-xl bg-blue-50 text-google-blue flex items-center justify-center border border-blue-200">
+              <Award className="w-4 h-4 text-google-blue" />
             </div>
-            <span className="text-[11px] text-slate-400">
-              Personal identity hidden until you accept an interview invitation
-            </span>
+            <div>
+              <div className="flex items-center space-x-2">
+                <span className="text-xs font-bold text-google-gray-900">
+                  Verified Recruiter Fast-Track Network
+                </span>
+                <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">
+                  3 Direct Pathways Unlocked
+                </span>
+              </div>
+              <p className="text-[11px] text-google-gray-600">
+                Your 3.91 GPA, Scheller ITM concentration, and CS Minor coursework bypass standard applicant ATS queues at partner employers.
+              </p>
+            </div>
+          </div>
+          <span className="text-[11px] text-google-gray-500 font-mono self-start sm:self-auto">
+            Synced with google-skills-ui-db
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+          {/* Recruiter Pathway 1: Google Cloud APM */}
+          <div className="bg-google-gray-50 border border-google-gray-200 rounded-xl p-3.5 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between text-xs mb-1">
+                <span className="font-bold text-google-gray-900 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-google-blue"></span>
+                  Google Cloud University Talent Fast-Track
+                </span>
+                <span className="text-[10px] bg-blue-100 text-google-blue font-bold px-1.5 py-0.5 rounded">
+                  APM &amp; Solutions
+                </span>
+              </div>
+              <p className="text-[11px] text-google-gray-600 leading-relaxed">
+                Direct screening referral for <strong>Associate Product Manager (APM)</strong> &amp; <strong>Cloud Solutions Consultant</strong> based on verified CS 1332 + MGT 4058 credentials.
+              </p>
+            </div>
+
+            <div className="pt-2 border-t border-google-gray-200 flex items-center justify-between text-xs">
+              <span className="text-google-gray-500 text-[10px]">
+                Target: Atlanta &amp; Mountain View
+              </span>
+              <button
+                onClick={() => setGoogleReferralRequested(true)}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
+                  googleReferralRequested
+                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                    : 'bg-google-blue hover:bg-google-blue-hover text-white shadow-2xs'
+                }`}
+              >
+                {googleReferralRequested ? (
+                  <>
+                    <Check className="w-3 h-3 text-emerald-700" />
+                    <span>✓ Referral Requested</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-3 h-3" />
+                    <span>Request Google Recruiter Intro</span>
+                  </>
+                )}
+              </button>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
-            {/* Inbound Bid 1 */}
-            <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="font-bold text-white">Google Cloud APM Screening Invitation</span>
-                  <span className="text-[10px] bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded font-mono">NEW BID</span>
-                </div>
-                <p className="text-[11px] text-slate-300">
-                  Target: <strong>Associate Product Manager</strong> • Guaranteed Range: <strong className="text-emerald-400">$175k - $215k TC</strong>
-                </p>
+          {/* Recruiter Pathway 2: Jobs.com Enterprise AI Consortium */}
+          <div className="bg-google-gray-50 border border-google-gray-200 rounded-xl p-3.5 flex flex-col justify-between space-y-3">
+            <div>
+              <div className="flex items-center justify-between text-xs mb-1">
+                <span className="font-bold text-google-gray-900 flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-purple-600"></span>
+                  Jobs.com Enterprise AI Partner Consortium
+                </span>
+                <span className="text-[10px] bg-purple-100 text-purple-800 font-bold px-1.5 py-0.5 rounded">
+                  Priority Review
+                </span>
               </div>
-              <div className="pt-2 mt-2 border-t border-white/10 flex items-center justify-between text-xs">
-                <span className="text-slate-400 text-[10px]">Criteria: GT ITM + 90%+ Readiness</span>
-                <button 
-                  onClick={() => alert('Accepted Google Cloud APM Screening Invitation! Interview scheduled.')}
-                  className="px-2.5 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-lg font-bold text-xs"
-                >
-                  Accept &amp; Reveal Profile
-                </button>
-              </div>
+              <p className="text-[11px] text-google-gray-600 leading-relaxed">
+                Guaranteed human recruiter review for <strong>Technical Product Analyst</strong> &amp; <strong>Enterprise AI Associate</strong> roles, bypassing automated filter drops.
+              </p>
             </div>
 
-            {/* Inbound Bid 2 */}
-            <div className="bg-white/5 border border-white/10 rounded-xl p-3 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="font-bold text-white">Jobs.com Enterprise AI Partner Invitation</span>
-                  <span className="text-[10px] bg-blue-500/20 text-blue-300 px-1.5 py-0.5 rounded font-mono">NEW BID</span>
-                </div>
-                <p className="text-[11px] text-slate-300">
-                  Target: <strong>Enterprise AI Strategy Analyst</strong> • Guaranteed Range: <strong className="text-emerald-400">$160k - $190k TC</strong>
-                </p>
-              </div>
-              <div className="pt-2 mt-2 border-t border-white/10 flex items-center justify-between text-xs">
-                <span className="text-slate-400 text-[10px]">Criteria: Business ITM + BigQuery</span>
-                <button 
-                  onClick={() => alert('Accepted Jobs.com Enterprise AI Invitation! Interview scheduled.')}
-                  className="px-2.5 py-1 bg-blue-500 hover:bg-blue-400 text-slate-950 rounded-lg font-bold text-xs"
-                >
-                  Accept &amp; Reveal Profile
-                </button>
-              </div>
+            <div className="pt-2 border-t border-google-gray-200 flex items-center justify-between text-xs">
+              <span className="text-google-gray-500 text-[10px]">
+                Target: Remote &amp; Hybrid Hubs
+              </span>
+              <button
+                onClick={() => setJobsComPacketSubmitted(true)}
+                className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
+                  jobsComPacketSubmitted
+                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                    : 'bg-purple-600 hover:bg-purple-700 text-white shadow-2xs'
+                }`}
+              >
+                {jobsComPacketSubmitted ? (
+                  <>
+                    <Check className="w-3 h-3 text-emerald-700" />
+                    <span>✓ Fast-Track Packet Sent</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-3 h-3" />
+                    <span>Submit Verified Packet</span>
+                  </>
+                )}
+              </button>
             </div>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Search & Source Filter Chips */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
@@ -233,6 +296,8 @@ export const JobsPortal: React.FC<JobsPortalProps> = ({
       <div className="space-y-4">
         {filteredJobs.map((job) => {
           const isBridgeEnrolled = enrolledBridge.includes(job.bridgeCourse.title);
+          const isFastTrackQualified = job.matchScore >= 85;
+
           return (
             <div
               key={job.id}
@@ -240,7 +305,7 @@ export const JobsPortal: React.FC<JobsPortalProps> = ({
             >
               <div className="flex flex-col md:flex-row md:items-start justify-between gap-3">
                 <div className="space-y-1">
-                  <div className="flex items-center space-x-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
                       job.source === 'Google Careers' ? 'bg-blue-50 text-blue-800' :
                       job.source === 'Jobs.com' ? 'bg-purple-50 text-purple-800' :
@@ -248,6 +313,12 @@ export const JobsPortal: React.FC<JobsPortalProps> = ({
                     }`}>
                       {job.source}
                     </span>
+                    {isFastTrackQualified && (
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 flex items-center gap-1">
+                        <Zap className="w-2.5 h-2.5 text-emerald-600 fill-emerald-600" />
+                        Fast-Track Recruiter Referral Qualified
+                      </span>
+                    )}
                     <span className="text-xs text-google-gray-500 font-medium">
                       Posted {job.postedDate} • {job.workType}
                     </span>
@@ -324,7 +395,7 @@ export const JobsPortal: React.FC<JobsPortalProps> = ({
                   <span className="font-semibold text-google-gray-900">Recommended Bridge:</span> {job.bridgeCourse.title} (⏱️ {job.bridgeCourse.duration})
                 </div>
 
-                <div className="flex items-center space-x-2 self-end sm:self-auto">
+                <div className="flex flex-wrap items-center gap-2 self-end sm:self-auto">
                   {/* FEATURE 1: Launch Mock Interview for this job */}
                   <button
                     onClick={() => onLaunchMockInterview && onLaunchMockInterview(job.title)}
@@ -332,6 +403,15 @@ export const JobsPortal: React.FC<JobsPortalProps> = ({
                   >
                     <Mic className="w-3 h-3" />
                     <span>AI Mock Interview</span>
+                  </button>
+
+                  {/* ATS Resume Tailor button */}
+                  <button
+                    onClick={() => setSelectedJobForAts(job)}
+                    className="px-3 py-1.5 bg-white hover:bg-purple-50 border border-purple-300 text-purple-700 rounded-lg text-xs font-semibold flex items-center space-x-1 transition-colors"
+                  >
+                    <FileText className="w-3 h-3" />
+                    <span>ATS Resume Tailor</span>
                   </button>
 
                   <button
@@ -361,6 +441,182 @@ export const JobsPortal: React.FC<JobsPortalProps> = ({
           );
         })}
       </div>
+
+      {/* ATS RESUME KEYWORD TAILOR & RECRUITER PACKET MODAL */}
+      {selectedJobForAts && (
+        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="bg-white rounded-2xl max-w-2xl w-full border border-google-gray-200 shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+            {/* Modal Header */}
+            <div className="p-4 border-b border-google-gray-200 flex items-center justify-between bg-google-gray-50">
+              <div className="flex items-center space-x-2">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 text-google-blue flex items-center justify-center">
+                  <FileText className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-google-gray-900">
+                    ATS Resume Keyword Optimizer &amp; Recruiter Packet
+                  </h3>
+                  <p className="text-xs text-google-gray-500">
+                    {selectedJobForAts.title} • {selectedJobForAts.company}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setSelectedJobForAts(null)}
+                className="p-1 rounded-lg hover:bg-google-gray-200 text-google-gray-500 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-5 overflow-y-auto space-y-4">
+              {/* ATS Parser Compatibility Score */}
+              <div className="bg-blue-50/70 border border-blue-200 rounded-xl p-3.5 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-bold text-google-blue uppercase tracking-wider block">
+                    ATS Parser Compatibility
+                  </span>
+                  <span className="text-sm font-medium text-google-gray-800">
+                    Tuned for Workday, Greenhouse &amp; Google Hire parsing algorithms
+                  </span>
+                </div>
+                <div className="text-2xl font-black text-google-blue bg-white px-3 py-1 rounded-xl border border-blue-200 shadow-2xs">
+                  {selectedJobForAts.matchScore}%
+                </div>
+              </div>
+
+              {/* Matched Keywords from Transcript */}
+              <div>
+                <span className="text-xs font-bold text-google-gray-800 block mb-1.5 flex items-center gap-1">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                  Verified Transcript Keywords Injected into Resume:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedJobForAts.matchedSkills.map((skill, idx) => (
+                    <span 
+                      key={idx}
+                      className="px-2 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-medium"
+                    >
+                      ✓ {skill}
+                    </span>
+                  ))}
+                  <span className="px-2 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-medium">
+                    ✓ Georgia Tech ITM (3.91 GPA)
+                  </span>
+                  <span className="px-2 py-1 bg-emerald-50 border border-emerald-200 text-emerald-800 rounded-lg text-xs font-medium">
+                    ✓ Computer Science Minor
+                  </span>
+                </div>
+              </div>
+
+              {/* Recommended Injections for 100% Score */}
+              <div>
+                <span className="text-xs font-bold text-google-gray-800 block mb-1.5 flex items-center gap-1">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-600" />
+                  Bridge Course Keywords Recommended to Complete ATS Match:
+                </span>
+                <div className="flex flex-wrap gap-1.5">
+                  {selectedJobForAts.missingSkills.map((skill, idx) => (
+                    <span 
+                      key={idx}
+                      className="px-2 py-1 bg-amber-50 border border-amber-200 text-amber-800 rounded-lg text-xs font-medium"
+                    >
+                      + {skill}
+                    </span>
+                  ))}
+                  <span className="px-2 py-1 bg-blue-50 border border-blue-200 text-google-blue rounded-lg text-xs font-medium">
+                    + Bridge: {selectedJobForAts.bridgeCourse.title}
+                  </span>
+                </div>
+              </div>
+
+              {/* Tailored Bullet Points Ready to Copy */}
+              <div className="bg-google-gray-50 border border-google-gray-200 rounded-xl p-3.5 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-google-gray-900">
+                    Tailored Resume Bullets for Emmett Wolland
+                  </span>
+                  <button
+                    onClick={() => handleCopyBullets(getTailoredBullets(selectedJobForAts).join('\n• '))}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 transition-all ${
+                      copiedBullets
+                        ? 'bg-emerald-600 text-white'
+                        : 'bg-white border border-google-gray-300 hover:bg-google-gray-100 text-google-gray-700'
+                    }`}
+                  >
+                    {copiedBullets ? (
+                      <>
+                        <Check className="w-3 h-3" />
+                        <span>Copied to Clipboard!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3 h-3" />
+                        <span>Copy Bullets</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                <div className="space-y-1.5 text-xs text-google-gray-700 font-sans bg-white p-3 rounded-lg border border-google-gray-200 leading-relaxed">
+                  {getTailoredBullets(selectedJobForAts).map((bullet, idx) => (
+                    <div key={idx} className="flex items-start space-x-2">
+                      <span className="text-google-blue font-bold">•</span>
+                      <span>{bullet}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Direct Fast-Track Recruiter Packet Submission */}
+              <div className="bg-emerald-50/50 border border-emerald-200 rounded-xl p-3 flex items-center justify-between">
+                <div>
+                  <span className="text-xs font-bold text-emerald-900 block">
+                    Campus Recruiter Fast-Track Packet
+                  </span>
+                  <span className="text-[11px] text-emerald-700">
+                    Includes verified GT transcript (3.91 GPA), Google Cloud skill proofs &amp; tailored resume.
+                  </span>
+                </div>
+                <button
+                  onClick={() => setPacketSubmittedForJob(selectedJobForAts.id)}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center space-x-1 ${
+                    packetSubmittedForJob === selectedJobForAts.id
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-white border border-emerald-300 text-emerald-800 hover:bg-emerald-100'
+                  }`}
+                >
+                  {packetSubmittedForJob === selectedJobForAts.id ? (
+                    <>
+                      <Check className="w-3 h-3 text-white" />
+                      <span>Packet Submitted</span>
+                    </>
+                  ) : (
+                    <>
+                      <Send className="w-3 h-3" />
+                      <span>Submit to Recruiter</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-3 border-t border-google-gray-200 bg-google-gray-50 flex items-center justify-between">
+              <span className="text-[11px] text-google-gray-500 font-mono">
+                Candidate ID: EW-GT-ITM-CS (Verified)
+              </span>
+              <button
+                onClick={() => setSelectedJobForAts(null)}
+                className="px-4 py-1.5 bg-google-gray-900 hover:bg-black text-white text-xs font-bold rounded-lg transition-colors"
+              >
+                Done
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
