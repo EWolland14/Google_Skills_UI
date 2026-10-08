@@ -62,17 +62,6 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
           Your home for building AI skills and more. Get hands on with Google Skills Labs, dive into in-depth courses, and learn directly from the experts.
         </p>
 
-        {/* FEATURE 3: Chaos Outage Simulator Callout Button */}
-        <div className="pt-1">
-          <button
-            onClick={onLaunchOutageSimulator}
-            className="inline-flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-xs font-bold shadow-sm transition-all hover:shadow-md animate-pulse"
-          >
-            <ShieldAlert className="w-4 h-4" />
-            <span>Launch Production Outage Simulator (Chaos Mode)</span>
-          </button>
-        </div>
-
         {/* Catalog Search input matching screenshot */}
         <div className="max-w-xl mx-auto pt-2">
           <div className="relative">
@@ -208,6 +197,34 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
           </button>
           <button className="w-7 h-7 rounded-full border border-google-gray-300 flex items-center justify-center text-google-gray-700 hover:bg-google-gray-100">
             <ArrowRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* Advanced Challenge: Chaos Engineering / Outage Simulator at the bottom */}
+      <div className="mt-12 pt-6 border-t border-google-gray-200">
+        <div className="bg-gradient-to-r from-slate-900 to-indigo-950 text-white rounded-2xl p-6 border border-slate-800 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+          <div className="space-y-1 max-w-xl">
+            <div className="flex items-center space-x-2">
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-red-500/20 text-red-300 border border-red-500/30 px-2 py-0.5 rounded">
+                Advanced SRE Practice
+              </span>
+              <span className="text-xs text-slate-400 font-mono">Sev-1 Incident Simulator</span>
+            </div>
+            <h3 className="text-base font-bold text-white">
+              Chaos Engineering: Production Outage Simulator
+            </h3>
+            <p className="text-xs text-slate-300">
+              Ready to test your Google Cloud skills under pressure? Diagnose runaway BigQuery billing spikes and resolve GKE pod crash loops before SLA breach.
+            </p>
+          </div>
+
+          <button
+            onClick={onLaunchOutageSimulator}
+            className="px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl shadow-sm transition-all flex items-center space-x-2 whitespace-nowrap self-start md:self-auto hover:shadow-md"
+          >
+            <ShieldAlert className="w-4 h-4" />
+            <span>Launch Outage Simulator</span>
           </button>
         </div>
       </div>
