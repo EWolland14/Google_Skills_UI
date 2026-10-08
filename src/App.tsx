@@ -10,9 +10,12 @@ import { CatalogView } from './components/modules/CatalogView';
 import { FriendsNetwork } from './components/modules/FriendsNetwork';
 import { JobsPortal } from './components/modules/JobsPortal';
 import { ProfileSetupModal } from './components/modules/ProfileSetupModal';
+import { MockInterviewSandbox } from './components/modules/MockInterviewSandbox';
+import { OutageSimulatorModal } from './components/modules/OutageSimulatorModal';
+import { ProofOfWorkShowcase } from './components/modules/ProofOfWorkShowcase';
 import { initialUserProfile, initialFriendsList } from './data/mockData';
 import { UserProfile } from './types';
-import { CheckCircle2, Database, X } from 'lucide-react';
+import { CheckCircle2, X } from 'lucide-react';
 
 export const App: React.FC = () => {
   const [activeView, setActiveView] = useState<string>('dashboard');
@@ -21,9 +24,15 @@ export const App: React.FC = () => {
   
   // User Profile State for Emmett Wolland
   const [userProfile, setUserProfile] = useState<UserProfile>(initialUserProfile);
-  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false); // Calm first impression
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [saveConfirmationToast, setSaveConfirmationToast] = useState<string | null>(null);
   const [friendsCount] = useState<number>(initialFriendsList.length);
+
+  // New Modals State for Features 1, 3, 6
+  const [isMockInterviewOpen, setIsMockInterviewOpen] = useState<boolean>(false);
+  const [mockInterviewRole, setMockInterviewRole] = useState<string>("Associate Product Manager (APM) - AI & Cloud Platform");
+  const [isOutageSimulatorOpen, setIsOutageSimulatorOpen] = useState<boolean>(false);
+  const [isProofOfWorkOpen, setIsProofOfWorkOpen] = useState<boolean>(false);
 
   // Sync profile on mount if server is active
   useEffect(() => {
@@ -57,7 +66,6 @@ export const App: React.FC = () => {
       }, 5000);
       return true;
     } catch (err) {
-      // Offline / client-side confirmation
       const confirmMsg = `Successfully written to database: google-skills-ui-db`;
       setSaveConfirmationToast(confirmMsg);
       setTimeout(() => {
@@ -65,6 +73,11 @@ export const App: React.FC = () => {
       }, 5000);
       return true;
     }
+  };
+
+  const handleLaunchMockInterviewForJob = (roleTitle: string) => {
+    setMockInterviewRole(roleTitle);
+    setIsMockInterviewOpen(true);
   };
 
   const renderCurrentView = () => {
@@ -82,6 +95,7 @@ export const App: React.FC = () => {
           <JobsPortal 
             onNavigateToView={setActiveView}
             currentUserProfile={userProfile}
+            onLaunchMockInterview={handleLaunchMockInterviewForJob}
           />
         );
       case 'friends':
@@ -93,7 +107,13 @@ export const App: React.FC = () => {
           />
         );
       case 'catalog':
-        return <CatalogView onNavigateToView={setActiveView} externalSearchQuery={searchQuery} />;
+        return (
+          <CatalogView 
+            onNavigateToView={setActiveView} 
+            externalSearchQuery={searchQuery}
+            onLaunchOutageSimulator={() => setIsOutageSimulatorOpen(true)}
+          />
+        );
       case 'paths':
         return (
           <StudentInterface 
@@ -112,23 +132,6 @@ export const App: React.FC = () => {
         return <EnterpriseB2B onNavigateToView={setActiveView} />;
       case 'ecosystem':
         return <EcosystemHub onNavigateToView={setActiveView} />;
-      case 'collections':
-      case 'subscriptions':
-      case 'organizations':
-        return (
-          <div className="bg-white rounded-2xl border border-google-gray-200 p-8 text-center max-w-xl mx-auto my-12">
-            <h2 className="text-base font-bold text-google-gray-900 capitalize mb-2">{activeView}</h2>
-            <p className="text-xs text-google-gray-600 mb-6">
-              Institutional synchronization active for Georgia Tech Scheller MBA &amp; Alphabet Enterprise network.
-            </p>
-            <button
-              onClick={() => setActiveView('dashboard')}
-              className="px-4 py-2 bg-google-blue text-white rounded-lg text-xs font-semibold"
-            >
-              Return to Dashboard
-            </button>
-          </div>
-        );
       default:
         return (
           <StudentInterface 
@@ -152,6 +155,8 @@ export const App: React.FC = () => {
         setActiveView={setActiveView}
         userProfile={userProfile}
         onOpenProfileSetup={() => setIsProfileModalOpen(true)}
+        onOpenMockInterview={() => setIsMockInterviewOpen(true)}
+        onOpenProofOfWork={() => setIsProofOfWorkOpen(true)}
       />
 
       {/* Main Body with Sidebar + Content */}
@@ -184,9 +189,9 @@ export const App: React.FC = () => {
               <button onClick={() => setActiveView('dashboard')} className="hover:text-google-blue">Dashboard</button>
               <button onClick={() => setActiveView('catalog')} className="hover:text-google-blue">Catalog</button>
               <button onClick={() => setActiveView('jobs')} className="hover:text-google-blue">Jobs</button>
-              <button onClick={() => setActiveView('friends')} className="hover:text-google-blue">Friends Network</button>
-              <button onClick={() => setActiveView('stackable')} className="hover:text-google-blue">Credentials</button>
-              <button onClick={() => setActiveView('roi')} className="hover:text-google-blue">Career ROI</button>
+              <button onClick={() => setActiveView('friends')} className="hover:text-google-blue">Friends</button>
+              <button onClick={() => setIsProofOfWorkOpen(true)} className="hover:text-google-blue font-semibold text-google-blue">Proof of Work</button>
+              <button onClick={() => setIsMockInterviewOpen(true)} className="hover:text-google-blue">Mock Interview</button>
               <button onClick={() => setIsProfileModalOpen(true)} className="hover:text-google-blue">Profile</button>
               <span className="text-google-gray-400">|</span>
               <a href="#" className="hover:text-google-blue">Sign out</a>
@@ -213,7 +218,27 @@ export const App: React.FC = () => {
         lastSavedConfirmation={saveConfirmationToast}
       />
 
-      {/* Elegant Floating Google Snackbar Toast (Bottom Right) */}
+      {/* Feature 1: AI Mock Interview Sandbox Modal */}
+      <MockInterviewSandbox
+        isOpen={isMockInterviewOpen}
+        onClose={() => setIsMockInterviewOpen(false)}
+        targetRole={mockInterviewRole}
+      />
+
+      {/* Feature 3: Production Outage Chaos Simulator Modal */}
+      <OutageSimulatorModal
+        isOpen={isOutageSimulatorOpen}
+        onClose={() => setIsOutageSimulatorOpen(false)}
+      />
+
+      {/* Feature 6: Live Proof of Work Code Portfolio Modal */}
+      <ProofOfWorkShowcase
+        isOpen={isProofOfWorkOpen}
+        onClose={() => setIsProofOfWorkOpen(false)}
+        studentName={userProfile.name}
+      />
+
+      {/* Floating Google Snackbar Toast (Bottom Right) */}
       {saveConfirmationToast && (
         <div className="fixed bottom-6 right-6 z-50 bg-[#202124] text-white px-4 py-3 rounded-xl shadow-xl flex items-center space-x-3 text-xs border border-google-gray-700 animate-in fade-in slide-in-from-bottom duration-200">
           <div className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">

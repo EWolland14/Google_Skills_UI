@@ -7,9 +7,10 @@ import {
   ArrowRight, 
   ChevronLeft, 
   Layers, 
-  ExternalLink,
   BookOpen,
-  FlaskConical
+  FlaskConical,
+  ShieldAlert,
+  Flame
 } from 'lucide-react';
 import { googleSkillsCatalogItems } from '../../data/mockData';
 import { CatalogItem } from '../../types';
@@ -17,11 +18,13 @@ import { CatalogItem } from '../../types';
 interface CatalogViewProps {
   onNavigateToView: (view: string) => void;
   externalSearchQuery?: string;
+  onLaunchOutageSimulator?: () => void;
 }
 
 export const CatalogView: React.FC<CatalogViewProps> = ({ 
   onNavigateToView,
-  externalSearchQuery = '' 
+  externalSearchQuery = '',
+  onLaunchOutageSimulator
 }) => {
   const [catalogSearch, setCatalogSearch] = useState(externalSearchQuery);
   const [selectedFormat, setSelectedFormat] = useState<string>('all');
@@ -51,13 +54,24 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
       </div>
 
       {/* Hero Header matching screenshot */}
-      <div className="text-center max-w-3xl mx-auto pt-4 pb-6 space-y-3">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-google-gray-900 tracking-tight font-sans">
+      <div className="text-center max-w-3xl mx-auto pt-2 pb-4 space-y-3">
+        <h1 className="text-2xl md:text-3xl font-extrabold text-google-gray-900 tracking-tight font-sans">
           Explore training your way
         </h1>
         <p className="text-xs md:text-sm text-google-gray-600 leading-relaxed max-w-2xl mx-auto">
-          Your home for building AI skills and more. Get hands on with Google Skills Labs, dive into in-depth courses, and learn directly from the experts. When ready, prove your new skills with career-boosting credentials.
+          Your home for building AI skills and more. Get hands on with Google Skills Labs, dive into in-depth courses, and learn directly from the experts.
         </p>
+
+        {/* FEATURE 3: Chaos Outage Simulator Callout Button */}
+        <div className="pt-1">
+          <button
+            onClick={onLaunchOutageSimulator}
+            className="inline-flex items-center space-x-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-full text-xs font-bold shadow-sm transition-all hover:shadow-md animate-pulse"
+          >
+            <ShieldAlert className="w-4 h-4" />
+            <span>Launch Production Outage Simulator (Chaos Mode)</span>
+          </button>
+        </div>
 
         {/* Catalog Search input matching screenshot */}
         <div className="max-w-xl mx-auto pt-2">
@@ -70,21 +84,21 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
               value={catalogSearch}
               onChange={(e) => setCatalogSearch(e.target.value)}
               placeholder="Search catalog"
-              className="w-full pl-10 pr-4 py-2.5 bg-google-gray-100 hover:bg-google-gray-200/70 focus:bg-white text-xs md:text-sm text-google-gray-900 rounded-full border border-transparent focus:border-google-blue focus:outline-none transition-all shadow-inner"
+              className="w-full pl-10 pr-4 py-2 bg-google-gray-100 hover:bg-google-gray-200/70 focus:bg-white text-xs md:text-sm text-google-gray-900 rounded-full border border-transparent focus:border-google-blue focus:outline-none transition-all shadow-inner"
             />
           </div>
         </div>
 
-        {/* Filter Pills matching screenshot: Credential, Format, Level, Language, Duration */}
-        <div className="flex flex-wrap items-center justify-center gap-2 pt-3">
-          <button className="px-3.5 py-1.5 bg-white border border-google-gray-300 rounded-full text-xs text-google-gray-700 hover:bg-google-gray-50 flex items-center space-x-1 shadow-2xs">
+        {/* Filter Pills matching screenshot */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+          <button className="px-3 py-1 bg-white border border-google-gray-300 rounded-full text-xs text-google-gray-700 hover:bg-google-gray-50 flex items-center space-x-1 shadow-2xs">
             <span>Credential</span>
             <ChevronDown className="w-3 h-3 text-google-gray-500" />
           </button>
           
           <button 
             onClick={() => setSelectedFormat(selectedFormat === 'all' ? 'Lab' : selectedFormat === 'Lab' ? 'Course' : 'all')}
-            className={`px-3.5 py-1.5 border rounded-full text-xs flex items-center space-x-1 shadow-2xs transition-colors ${
+            className={`px-3 py-1 border rounded-full text-xs flex items-center space-x-1 shadow-2xs transition-colors ${
               selectedFormat !== 'all' 
                 ? 'bg-blue-50 border-google-blue text-google-blue font-semibold' 
                 : 'bg-white border-google-gray-300 text-google-gray-700 hover:bg-google-gray-50'
@@ -96,7 +110,7 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
 
           <button 
             onClick={() => setSelectedLevel(selectedLevel === 'all' ? 'Introductory' : selectedLevel === 'Introductory' ? 'Intermediate' : 'all')}
-            className={`px-3.5 py-1.5 border rounded-full text-xs flex items-center space-x-1 shadow-2xs transition-colors ${
+            className={`px-3 py-1 border rounded-full text-xs flex items-center space-x-1 shadow-2xs transition-colors ${
               selectedLevel !== 'all' 
                 ? 'bg-blue-50 border-google-blue text-google-blue font-semibold' 
                 : 'bg-white border-google-gray-300 text-google-gray-700 hover:bg-google-gray-50'
@@ -106,19 +120,14 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
             <ChevronDown className="w-3 h-3 text-google-gray-500" />
           </button>
 
-          <button className="px-3.5 py-1.5 bg-white border border-google-gray-300 rounded-full text-xs text-google-gray-700 hover:bg-google-gray-50 flex items-center space-x-1 shadow-2xs">
-            <span>Language</span>
-            <ChevronDown className="w-3 h-3 text-google-gray-500" />
-          </button>
-
-          <button className="px-3.5 py-1.5 bg-white border border-google-gray-300 rounded-full text-xs text-google-gray-700 hover:bg-google-gray-50 flex items-center space-x-1 shadow-2xs">
+          <button className="px-3 py-1 bg-white border border-google-gray-300 rounded-full text-xs text-google-gray-700 hover:bg-google-gray-50 flex items-center space-x-1 shadow-2xs">
             <span>Duration</span>
             <ChevronDown className="w-3 h-3 text-google-gray-500" />
           </button>
         </div>
       </div>
 
-      {/* Result count line matching screenshot: "1,337 results" */}
+      {/* Result count line matching screenshot */}
       <div className="flex items-center justify-between text-xs text-google-gray-600 px-1 border-b border-google-gray-200 pb-2">
         <span><strong>1,337 results</strong></span>
         <span>Showing 1 - {filteredItems.length} of 1,337</span>
@@ -129,11 +138,11 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
         {filteredItems.map((item) => (
           <div
             key={item.id}
-            className="bg-white rounded-2xl border border-google-gray-200 p-5 shadow-sm hover:shadow-google-hover hover:border-google-blue/40 transition-all flex flex-col justify-between group"
+            className="bg-white rounded-2xl border border-google-gray-200 p-5 shadow-2xs hover:shadow-google-hover hover:border-google-blue/40 transition-all flex flex-col justify-between group"
           >
             <div>
-              {/* Top Tags matching screenshot: Course, Skill badge, Lab */}
-              <div className="flex items-center space-x-2 text-[10px] font-semibold text-google-gray-700 mb-3">
+              {/* Top Tags matching screenshot */}
+              <div className="flex items-center space-x-2 text-[10px] font-semibold text-google-gray-700 mb-2.5">
                 <span className="bg-google-gray-100 px-2 py-0.5 rounded flex items-center">
                   {item.type === 'Lab' ? (
                     <FlaskConical className="w-3 h-3 mr-1 text-purple-600" />
@@ -150,40 +159,51 @@ export const CatalogView: React.FC<CatalogViewProps> = ({
               </div>
 
               {/* Title */}
-              <h3 className="text-sm font-bold text-google-gray-900 group-hover:text-google-blue transition-colors mb-2 leading-snug">
+              <h3 className="text-sm font-bold text-google-gray-900 group-hover:text-google-blue transition-colors mb-1.5 leading-snug">
                 {item.title}
               </h3>
 
               {/* Description */}
-              <p className="text-xs text-google-gray-600 line-clamp-3 mb-4 leading-relaxed">
+              <p className="text-xs text-google-gray-600 line-clamp-3 mb-3 leading-relaxed">
                 {item.description}
               </p>
             </div>
 
-            {/* Footer matching screenshot: Duration and round blue arrow button */}
-            <div className="flex items-center justify-between pt-3 border-t border-google-gray-100 text-xs text-google-gray-600">
+            {/* Footer matching screenshot */}
+            <div className="flex items-center justify-between pt-2.5 border-t border-google-gray-100 text-xs text-google-gray-600">
               <div className="flex items-center space-x-1.5">
                 <Clock className="w-3.5 h-3.5 text-google-gray-500" />
                 <span>{item.duration}</span>
               </div>
 
-              <button 
-                onClick={() => alert(`Enrolling in "${item.title}" (${item.duration})`)}
-                title="Start training"
-                className="w-8 h-8 rounded-full bg-sky-100 hover:bg-google-blue text-sky-700 hover:text-white flex items-center justify-center transition-all shadow-2xs"
-              >
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              <div className="flex items-center space-x-1.5">
+                {item.type === 'Lab' && (
+                  <button
+                    onClick={onLaunchOutageSimulator}
+                    title="Launch Chaos Mode for this Lab"
+                    className="p-1 rounded-full text-red-500 hover:bg-red-50 transition-colors"
+                  >
+                    <ShieldAlert className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                <button 
+                  onClick={() => alert(`Enrolling in "${item.title}" (${item.duration})`)}
+                  title="Start training"
+                  className="w-7 h-7 rounded-full bg-sky-100 hover:bg-google-blue text-sky-700 hover:text-white flex items-center justify-center transition-all shadow-2xs"
+                >
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Pagination Footer matching screenshot: "1 - 8 of 1337 < >" */}
-      <div className="flex items-center justify-center space-x-4 pt-6 text-xs text-google-gray-600">
+      {/* Pagination Footer matching screenshot */}
+      <div className="flex items-center justify-center space-x-4 pt-4 text-xs text-google-gray-600">
         <span>1 - 8 of 1337</span>
         <div className="flex items-center space-x-1">
-          <button className="w-7 h-7 rounded-full border border-google-gray-300 flex items-center justify-center text-google-gray-400 hover:bg-google-gray-100 disabled:opacity-40">
+          <button className="w-7 h-7 rounded-full border border-google-gray-300 flex items-center justify-center text-google-gray-400 hover:bg-google-gray-100">
             <ChevronLeft className="w-4 h-4" />
           </button>
           <button className="w-7 h-7 rounded-full border border-google-gray-300 flex items-center justify-center text-google-gray-700 hover:bg-google-gray-100">

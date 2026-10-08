@@ -1,5 +1,5 @@
 import React from 'react';
-import { Menu, Search, Star, Flame, HelpCircle, Globe, ExternalLink, Edit3, Database } from 'lucide-react';
+import { Menu, Search, Star, Flame, HelpCircle, Globe, ExternalLink, Edit3, Mic, Code } from 'lucide-react';
 import { UserProfile } from '../../types';
 
 interface HeaderProps {
@@ -10,6 +10,8 @@ interface HeaderProps {
   setActiveView: (view: string) => void;
   userProfile: UserProfile;
   onOpenProfileSetup: () => void;
+  onOpenMockInterview?: () => void;
+  onOpenProofOfWork?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -19,7 +21,9 @@ export const Header: React.FC<HeaderProps> = ({
   activeView,
   setActiveView,
   userProfile,
-  onOpenProfileSetup
+  onOpenProfileSetup,
+  onOpenMockInterview,
+  onOpenProofOfWork
 }) => {
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-google-gray-200">
@@ -51,7 +55,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Center: Search pill */}
-        <div className="flex-1 max-w-xl mx-4 hidden md:block">
+        <div className="flex-1 max-w-lg mx-4 hidden md:block">
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-google-gray-500">
               <Search className="w-4 h-4" />
@@ -66,56 +70,55 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
         </div>
 
-        {/* Right Actions: Clean, Uncluttered, Exact Google Style */}
-        <div className="flex items-center space-x-2 sm:space-x-3">
-          {/* Cloud Console Link */}
-          <div className="hidden lg:flex items-center text-xs text-google-gray-600 mr-1">
-            <span>Apply skills in Cloud Console</span>
-            <a
-              href="https://console.cloud.google.com"
-              target="_blank"
-              rel="noreferrer"
-              className="ml-2 px-3 py-1 bg-white hover:bg-google-gray-100 text-google-blue text-xs font-medium rounded-full border border-google-gray-300 shadow-2xs transition-colors flex items-center"
-            >
-              Get started
-              <ExternalLink className="w-3 h-3 ml-1" />
-            </a>
-          </div>
+        {/* Right Actions: Feature Buttons, Points, Streak, Profile */}
+        <div className="flex items-center space-x-2 sm:space-x-2.5">
+          
+          {/* Feature 1: Mock Interview Quick Button */}
+          <button
+            onClick={onOpenMockInterview}
+            className="hidden md:flex items-center space-x-1 px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-google-blue text-xs font-semibold rounded-full border border-blue-200 transition-colors"
+            title="Launch AI Mock Interview Sandbox"
+          >
+            <Mic className="w-3.5 h-3.5" />
+            <span>AI Interview</span>
+          </button>
+
+          {/* Feature 6: Proof of Work Portfolio Quick Button */}
+          <button
+            onClick={onOpenProofOfWork}
+            className="hidden lg:flex items-center space-x-1 px-3 py-1.5 bg-google-gray-50 hover:bg-google-gray-100 text-google-gray-700 text-xs font-semibold rounded-full border border-google-gray-300 transition-colors"
+            title="Inspect Live Proof of Work Code Portfolio"
+          >
+            <Code className="w-3.5 h-3.5 text-google-blue" />
+            <span>Proof of Work</span>
+          </button>
 
           {/* Quick Profile Setup Button */}
           <button
             onClick={onOpenProfileSetup}
-            className="flex items-center space-x-1.5 px-3 py-1.5 bg-google-gray-100 hover:bg-blue-50 text-google-gray-700 hover:text-google-blue rounded-full text-xs font-medium border border-google-gray-200 transition-colors"
-            title="Edit Profile, Resume & Settings"
+            className="flex items-center space-x-1 px-2.5 py-1.5 bg-google-gray-100 hover:bg-google-gray-200 text-google-gray-700 rounded-full text-xs font-medium transition-colors"
+            title="Edit Profile & Resume"
           >
             <Edit3 className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Profile</span>
           </button>
 
           {/* Points / Stars */}
-          <div className="flex items-center space-x-1 px-2.5 py-1 text-google-gray-700 text-xs font-semibold">
-            <Star className="w-4 h-4 fill-amber-400 text-amber-500" />
+          <div className="flex items-center space-x-1 px-2 py-1 text-google-gray-700 text-xs font-semibold">
+            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-500" />
             <span>120</span>
           </div>
 
           {/* Flame / Streak */}
-          <div className="flex items-center space-x-1 px-2.5 py-1 text-google-gray-700 text-xs font-semibold">
-            <Flame className="w-4 h-4 fill-orange-500 text-orange-500" />
+          <div className="flex items-center space-x-1 px-2 py-1 text-google-gray-700 text-xs font-semibold">
+            <Flame className="w-3.5 h-3.5 fill-orange-500 text-orange-500" />
             <span>5</span>
           </div>
-
-          {/* Help & Globe */}
-          <button className="p-1.5 text-google-gray-600 hover:text-google-gray-900 hover:bg-google-gray-100 rounded-full hidden sm:block">
-            <HelpCircle className="w-4 h-4" />
-          </button>
-          <button className="p-1.5 text-google-gray-600 hover:text-google-gray-900 hover:bg-google-gray-100 rounded-full hidden sm:block">
-            <Globe className="w-4 h-4" />
-          </button>
 
           {/* Avatar Profile */}
           <div 
             onClick={onOpenProfileSetup}
-            className="relative group cursor-pointer pl-1"
+            className="relative group cursor-pointer pl-0.5"
           >
             <div className="w-8 h-8 rounded-full bg-google-blue text-white flex items-center justify-center font-bold text-xs shadow-2xs hover:ring-2 hover:ring-google-blue/30 transition-all">
               <span>EW</span>
